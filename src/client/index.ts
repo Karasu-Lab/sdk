@@ -1,3 +1,6 @@
+import { createAppAuthClient } from '@karasu-lab/utils/client';
+import { hostConfigSchema, type HostConfig, type HostConfigInput } from '../config';
+
 /**
  * The authentication and single sign-on client surface of the Karasu Lab
  * SDK. `createAppAuthClient` builds the better-auth client every app
@@ -6,3 +9,23 @@
  * which consuming apps provide as peer dependencies.
  */
 export { createAppAuthClient, type CreateAppAuthClientOptions } from '@karasu-lab/utils/client';
+
+/** A configured SDK instance: the parsed hosts and the clients built from them. */
+export interface KarasuSdk {
+  hosts: HostConfig;
+  authClient: ReturnType<typeof createAppAuthClient>['authClient'];
+  bridgeFirebaseSession: ReturnType<typeof createAppAuthClient>['bridgeFirebaseSession'];
+}
+
+/**
+ * Creates an SDK instance from the host app's injected host
+ * configuration. The hosts are parsed with the zod host schema, so an
+ * instance always carries valid origins, and the auth client is built
+ * against the injected `authApiUrl` — the SDK itself reads no
+ * environment variables.
+ */
+export function createSdk(input: HostConfigInput): KarasuSdk {
+  const hosts = hostConfigSchema.parse(input);
+  const { authClient, bridgeFirebaseSession } = createAppAuthClient({ baseURL: hosts.authApiUrl });
+  return { hosts, authClient, bridgeFirebaseSession };
+}

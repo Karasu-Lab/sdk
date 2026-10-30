@@ -4,6 +4,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./client": "./src/client/index.ts",
+    "./config": "./src/config.ts",
     "./uri": "./src/uri/index.ts"
   },
   "files": [
@@ -13,7 +14,8 @@
     "registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
-    "@karasu-lab/utils": "workspace:*"
+    "@karasu-lab/utils": "workspace:*",
+    "zod": "^4.5.4"
   },
   "peerDependencies": {
     "@better-auth/oauth-provider": "^1.7.12",
