@@ -1,0 +1,25 @@
+{
+  "name": "@karasu-lab/sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client/index.ts",
+    "./uri": "./src/uri/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "@karasu-lab/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "@better-auth/oauth-provider": "^1.7.12",
+    "@better-auth/passkey": "1.7.12",
+    "@better-auth/sso": "1.7.12",
+    "better-auth": "^1.7.12"
+  }
+}
