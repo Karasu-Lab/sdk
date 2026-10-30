@@ -11,7 +11,7 @@ import { hostConfigSchema, type HostConfig, type HostConfigInput } from '../conf
 export { createAppAuthClient, type CreateAppAuthClientOptions } from '@karasu-lab/utils/client';
 
 /** A configured SDK instance: the parsed hosts and the clients built from them. */
-export interface KarasuSdk {
+export interface SdkInstance {
   hosts: HostConfig;
   authClient: ReturnType<typeof createAppAuthClient>['authClient'];
   bridgeFirebaseSession: ReturnType<typeof createAppAuthClient>['bridgeFirebaseSession'];
@@ -24,7 +24,7 @@ export interface KarasuSdk {
  * against the injected `authApiUrl` — the SDK itself reads no
  * environment variables.
  */
-export function createSdk(input: HostConfigInput): KarasuSdk {
+export function createSdk(input: HostConfigInput): SdkInstance {
   const hosts = hostConfigSchema.parse(input);
   const { authClient, bridgeFirebaseSession } = createAppAuthClient({ baseURL: hosts.authApiUrl });
   return { hosts, authClient, bridgeFirebaseSession };
