@@ -1,11 +1,11 @@
-import { createRemoteJWKSet, jwtVerify, type JWTPayload } from 'jose';
+import { createRemoteJWKSet, jwtVerify, type JWTPayload } from "jose";
 
 /** The signed-in user, read from the verified session token's claims. */
 export interface SessionUser {
-  id: string;
-  email: string;
-  name: string | null;
-  image: string | null;
+    id: string;
+    email: string;
+    name: string | null;
+    image: string | null;
 }
 
 /**
@@ -13,16 +13,16 @@ export interface SessionUser {
  * the token that proved it expires.
  */
 export interface SessionInfo {
-  user: SessionUser;
-  expiresAt: Date;
+    user: SessionUser;
+    expiresAt: Date;
 }
 
 /** The claims the auth server's token endpoint puts in its session tokens. */
 interface SessionTokenClaims extends JWTPayload {
-  id?: string;
-  email?: string;
-  name?: string;
-  image?: string | null;
+    id?: string;
+    email?: string;
+    name?: string;
+    image?: string | null;
 }
 
 /**
@@ -40,40 +40,45 @@ interface SessionTokenClaims extends JWTPayload {
  * Returns null when there is no session to exchange or the token does
  * not verify.
  */
-export function createSessionReader(authApiUrl: string): () => Promise<SessionInfo | null> {
-  const base = authApiUrl.replace(/\/+$/, '');
-  const jwks = createRemoteJWKSet(new URL(`${base}/api/auth/jwks`));
+export function createSessionReader(
+    authApiUrl: string,
+): () => Promise<SessionInfo | null> {
+    const base = authApiUrl.replace(/\/+$/, "");
+    const jwks = createRemoteJWKSet(new URL(`${base}/api/auth/jwks`));
 
-  return async function getSession(): Promise<SessionInfo | null> {
-    let token: string | undefined;
-    try {
-      const response = await fetch(`${base}/api/auth/token`, {
-        credentials: 'include',
-        headers: { Accept: 'application/json' },
-      });
-      if (!response.ok) return null;
-      token = ((await response.json()) as { token?: string }).token;
-    } catch {
-      return null;
-    }
-    if (!token) return null;
+    return async function getSession(): Promise<SessionInfo | null> {
+        let token: string | undefined;
+        try {
+            const response = await fetch(`${base}/api/auth/token`, {
+                credentials: "include",
+                headers: { Accept: "application/json" },
+            });
+            if (!response.ok) return null;
+            token = ((await response.json()) as { token?: string }).token;
+        } catch {
+            return null;
+        }
+        if (!token) return null;
 
-    try {
-      const { payload } = await jwtVerify(token, jwks);
-      const claims = payload as SessionTokenClaims;
-      const id = typeof claims.sub === 'string' && claims.sub ? claims.sub : claims.id;
-      if (!id || !claims.email) return null;
-      return {
-        user: {
-          id,
-          email: claims.email,
-          name: claims.name ?? null,
-          image: claims.image ?? null,
-        },
-        expiresAt: new Date((claims.exp ?? 0) * 1000),
-      };
-    } catch {
-      return null;
-    }
-  };
+        try {
+            const { payload } = await jwtVerify(token, jwks);
+            const claims = payload as SessionTokenClaims;
+            const id =
+                typeof claims.sub === "string" && claims.sub
+                    ? claims.sub
+                    : claims.id;
+            if (!id || !claims.email) return null;
+            return {
+                user: {
+                    id,
+                    email: claims.email,
+                    name: claims.name ?? null,
+                    image: claims.image ?? null,
+                },
+                expiresAt: new Date((claims.exp ?? 0) * 1000),
+            };
+        } catch {
+            return null;
+        }
+    };
 }
