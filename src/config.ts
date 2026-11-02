@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Host configuration for a Karasu Lab SDK instance: the origins of the
@@ -8,14 +8,14 @@ import { z } from 'zod';
  * offending field named instead of failing mid-sign-in.
  */
 export const hostConfigSchema = z.object({
-  /** Origin of the api-auth worker hosting the better-auth instance. Every sign-in call goes here. */
-  authApiUrl: z.url(),
-  /** Origin of the auth app hosting the sign-in pages. */
-  authUrl: z.url().optional(),
-  /** Origin of the accounts app, the default destination after sign-in. */
-  accountsUrl: z.url().optional(),
-  /** Origin of the root app. */
-  appUrl: z.url().optional(),
+    /** Origin of the api-auth worker hosting the better-auth instance. Every sign-in call goes here. */
+    authApiUrl: z.url(),
+    /** Origin of the auth app hosting the sign-in pages. */
+    authUrl: z.url().optional(),
+    /** Origin of the accounts app, the default destination after sign-in. */
+    accountsUrl: z.url().optional(),
+    /** Origin of the root app. */
+    appUrl: z.url().optional(),
 });
 
 export type HostConfig = z.infer<typeof hostConfigSchema>;
@@ -27,8 +27,8 @@ export type HostConfig = z.infer<typeof hostConfigSchema>;
  * missing or malformed required host.
  */
 export interface HostConfigInput {
-  authApiUrl?: string | undefined;
-  authUrl?: string | undefined;
-  accountsUrl?: string | undefined;
-  appUrl?: string | undefined;
+    authApiUrl?: string | undefined;
+    authUrl?: string | undefined;
+    accountsUrl?: string | undefined;
+    appUrl?: string | undefined;
 }
