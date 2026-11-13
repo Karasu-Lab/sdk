@@ -6,7 +6,8 @@
         "./client": "./src/client/index.ts",
         "./config": "./src/config.ts",
         "./uri": "./src/uri/index.ts",
-        "./session": "./src/session/index.ts"
+        "./session": "./src/session/index.ts",
+        "./sse": "./src/sse/index.ts"
     },
     "files": [
         "src"
@@ -20,9 +21,10 @@
         "access": "public"
     },
     "dependencies": {
+        "@karasu-lab/sse": "workspace:*",
         "@karasu-lab/utils": "workspace:*",
-        "zod": "^4.5.4",
-        "jose": "^6.2.5"
+        "jose": "^6.2.5",
+        "zod": "^4.5.4"
     },
     "peerDependencies": {
         "@better-auth/oauth-provider": "^1.7.12",
